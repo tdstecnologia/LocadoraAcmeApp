@@ -50,6 +50,16 @@ namespace LocadoraAcmeApp
                 opcoes.SlidingExpiration = true;
             });
 
+            services.Configure<IdentityOptions>(opcoes =>
+            {
+                opcoes.Password.RequireDigit = false;
+                opcoes.Password.RequireLowercase = false;
+                opcoes.Password.RequireNonAlphanumeric = false;
+                opcoes.Password.RequireUppercase = false;
+                opcoes.Password.RequiredLength = 6;
+                opcoes.Password.RequiredUniqueChars = 1;
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
