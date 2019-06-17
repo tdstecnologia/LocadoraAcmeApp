@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LocadoraAcmeApp.Models
 {
-    public class Contexto : IdentityDbContext
+    public class Contexto : IdentityDbContext<Usuario,NiveisAcesso,string>
     {
 
         public DbSet<Usuario> Usuarios { get; set; }
