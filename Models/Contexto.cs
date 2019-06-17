@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using LocadoraAcmeApp.Mapeamento;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,5 +20,19 @@ namespace LocadoraAcmeApp.Models
             : base(options)
         {
         }
+
+
+        protected override void OnModelCreating(ModelBuilder  builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.ApplyConfiguration(new UsuarioMap());
+            builder.ApplyConfiguration(new EnderecoMap());
+            builder.ApplyConfiguration(new CarroMap());
+            builder.ApplyConfiguration(new AluguelMap());
+            builder.ApplyConfiguration(new ContaMap());
+            builder.ApplyConfiguration(new NivelAcessoMap());
+        }
+
     }
 }

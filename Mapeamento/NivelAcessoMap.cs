@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LocadoraAcmeApp.Mapeamento
 {
-    public class UsuarNivelAcessoMapioMap : IEntityTypeConfiguration<NiveisAcesso>
+    public class NivelAcessoMap : IEntityTypeConfiguration<NiveisAcesso>
     {
         public void Configure(EntityTypeBuilder<NiveisAcesso> builder)
         {
