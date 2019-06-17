@@ -42,6 +42,14 @@ namespace LocadoraAcmeApp
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<Contexto>();
 
+            services.ConfigureApplicationCookie(opcoes =>
+            {
+                opcoes.CookieHttpOnly = true;
+                opcoes.ExpireTimeSpan = TimeSpan.FromMinutes(50);
+                opcoes.LoginPath = "/Usuarios/Login";
+                opcoes.SlidingExpiration = true;
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
