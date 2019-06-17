@@ -17,5 +17,7 @@ namespace LocadoraAcmeApp.Models
         public ICollection<Endereco> Enderecos { get; set; }
 
         public ICollection<Aluguel> Alugueis { get; set; }
+
+        public Conta Conta { get; set; }
     }
 }
