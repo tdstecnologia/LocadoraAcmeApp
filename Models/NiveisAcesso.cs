@@ -8,5 +8,6 @@ namespace LocadoraAcmeApp.Models
 {
     public class NiveisAcesso : IdentityRole
     {
+        public string Descricao { get; set; }
     }
 }
