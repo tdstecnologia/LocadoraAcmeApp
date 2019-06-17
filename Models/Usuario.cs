@@ -13,5 +13,9 @@ namespace LocadoraAcmeApp.Models
         public string CPF { get; set; }
 
         public string Telefone { get; set; }
+
+        public ICollection<Endereco> Enderecos { get; set; }
+
+        public ICollection<Aluguel> Alugueis { get; set; }
     }
 }
