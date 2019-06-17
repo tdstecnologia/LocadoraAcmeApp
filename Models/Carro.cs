@@ -14,5 +14,7 @@ namespace LocadoraAcmeApp.Models
         public string Marca { get; set; }
 
         public int PrecoDiaria { get; set; }
+
+        public ICollection<Aluguel> Alugueis { get; set; }
     }
 }
