@@ -19,21 +19,33 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">LocadoraAcmeApp</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-controller="Usuarios" asp-action="Index"><i class="fas fa-car fa-lg"></i>Locadora Acme</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link navbar-text" asp-controller="Usuarios" asp-action="Registro">Registro</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link navbar-text" asp-controller="Usuarios" asp-action="Login">Login</a>
+                        </li>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link navbar-text" asp-controller="Usuarios" asp-action="Index">Meus Dados</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link navbar-text" asp-controller="Carros" asp-action="Index">Carros</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link navbar-text" asp-controller="NiveisAcesso" asp-action="Index">Níveis de Acesso</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link navbar-text" asp-controller="Contas" asp-action="Index">Saldo</a>
                         </li>
                     </ul>
                 </div>
