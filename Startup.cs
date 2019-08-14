@@ -13,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using LocadoraAcmeApp.Models;
+using LocadoraAcmeApp.AcessoDados.Interfaces;
+using LocadoraAcmeApp.AcessoDados.Repositorios;
 
 namespace LocadoraAcmeApp
 {
@@ -59,6 +61,8 @@ namespace LocadoraAcmeApp
                 opcoes.Password.RequiredLength = 6;
                 opcoes.Password.RequiredUniqueChars = 1;
             });
+
+            services.AddScoped<INivelAcessoRepositorio, NivelAcessoRepositorio>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

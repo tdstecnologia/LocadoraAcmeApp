@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LocadoraAcmeApp.AcessoDados.Interfaces
 {
-    public interface INivelAcesso : IRepositorioGenerico<NiveisAcesso>
+    public interface INivelAcessoRepositorio : IRepositorioGenerico<NiveisAcesso>
     {
     }
 }

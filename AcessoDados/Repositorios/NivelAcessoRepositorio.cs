@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LocadoraAcmeApp.AcessoDados.Repositorios
 {
-    public class NivelAcessoRepositorio : RepositorioGenerico<NiveisAcesso>, INivelAcesso
+    public class NivelAcessoRepositorio : RepositorioGenerico<NiveisAcesso>, INivelAcessoRepositorio
     {
         private readonly RoleManager<NiveisAcesso> _gerenciadorNiveisAcesso;
         private readonly Contexto _contexto;
