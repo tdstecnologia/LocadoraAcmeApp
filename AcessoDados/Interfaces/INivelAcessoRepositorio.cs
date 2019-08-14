@@ -8,5 +8,6 @@ namespace LocadoraAcmeApp.AcessoDados.Interfaces
 {
     public interface INivelAcessoRepositorio : IRepositorioGenerico<NiveisAcesso>
     {
+        Task<bool> NivelAcessoExiste(string nivelAcesso);
     }
 }
