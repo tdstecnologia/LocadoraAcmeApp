@@ -63,6 +63,7 @@ namespace LocadoraAcmeApp
             });
 
             services.AddScoped<INivelAcessoRepositorio, NivelAcessoRepositorio>();
+            services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
