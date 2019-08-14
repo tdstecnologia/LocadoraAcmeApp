@@ -6,22 +6,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LocadoraAcmeApp.Models;
+using LocadoraAcmeApp.AcessoDados.Interfaces;
 
 namespace LocadoraAcmeApp.Controllers
 {
     public class NiveisAcessosController : Controller
     {
-        private readonly Contexto _context;
+        private readonly INivelAcessoRepositorio _nivelAcessoRepositorio;
 
-        public NiveisAcessosController(Contexto context)
+        public NiveisAcessosController(INivelAcessoRepositorio nivelAcessoRepositorio)
         {
-            _context = context;
+            _nivelAcessoRepositorio = nivelAcessoRepositorio;
         }
 
         // GET: NiveisAcessoes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.NiveisAcessos.ToListAsync());
+            return View(await _nivelAcessoRepositorio.PegarTodos().ToListAsync());
         }
 
         // GET: NiveisAcessoes/Details/5
@@ -32,7 +33,7 @@ namespace LocadoraAcmeApp.Controllers
                 return NotFound();
             }
 
-            var niveisAcesso = await _context.NiveisAcessos
+            var niveisAcesso = await _nivelAcessoRepositorio.PegarPeloId
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (niveisAcesso == null)
             {
@@ -53,13 +54,15 @@ namespace LocadoraAcmeApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Descricao,Id,Name,NormalizedName,ConcurrencyStamp")] NiveisAcesso niveisAcesso)
+        public async Task<IActionResult> Create([Bind("Descricao,Name")] NiveisAcesso niveisAcesso)
         {
-            if (ModelState.IsValid)
+            bool nivelExiste = await _nivelAcessoRepositorio.NivelAcessoExiste(niveisAcesso.Name);
+
+            if (nivelExiste)
             {
-                _context.Add(niveisAcesso);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                niveisAcesso.NormalizedName = niveisAcesso.Name.ToUpper();
+                await _nivelAcessoRepositorio.Inserir(niveisAcesso);
+                return RedirectToAction("Index", "NiveisACessos");
             }
             return View(niveisAcesso);
         }
@@ -72,7 +75,7 @@ namespace LocadoraAcmeApp.Controllers
                 return NotFound();
             }
 
-            var niveisAcesso = await _context.NiveisAcessos.FindAsync(id);
+            var niveisAcesso = await _nivelAcessoRepositorio.PegarPeloId(id);
             if (niveisAcesso == null)
             {
                 return NotFound();
@@ -96,8 +99,8 @@ namespace LocadoraAcmeApp.Controllers
             {
                 try
                 {
-                    _context.Update(niveisAcesso);
-                    await _context.SaveChangesAsync();
+                    _nivelAcessoRepositorio.Update(niveisAcesso);
+                    await _nivelAcessoRepositorio.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -123,7 +126,7 @@ namespace LocadoraAcmeApp.Controllers
                 return NotFound();
             }
 
-            var niveisAcesso = await _context.NiveisAcessos
+            var niveisAcesso = await _nivelAcessoRepositorio.NiveisAcessos
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (niveisAcesso == null)
             {
@@ -138,15 +141,15 @@ namespace LocadoraAcmeApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var niveisAcesso = await _context.NiveisAcessos.FindAsync(id);
-            _context.NiveisAcessos.Remove(niveisAcesso);
-            await _context.SaveChangesAsync();
+            var niveisAcesso = await _nivelAcessoRepositorio.NiveisAcessos.FindAsync(id);
+            _nivelAcessoRepositorio.NiveisAcessos.Remove(niveisAcesso);
+            await _nivelAcessoRepositorio.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool NiveisAcessoExists(string id)
         {
-            return _context.NiveisAcessos.Any(e => e.Id == id);
+            return _nivelAcessoRepositorio.NiveisAcessos.Any(e => e.Id == id);
         }
     }
 }
