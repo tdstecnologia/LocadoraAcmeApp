@@ -14,7 +14,7 @@ namespace LocadoraAcmeApp.Mapeamento
         {
             builder.HasKey(e => e.CarroId);
 
-            builder.Property(c => c.Modelo).IsRequired().HasMaxLength(100); ;
+            builder.Property(c => c.Nome).IsRequired().HasMaxLength(100); ;
             builder.Property(c => c.Marca).IsRequired().HasMaxLength(100);
             builder.Property(c => c.PrecoDiaria).IsRequired();
             builder.Property(c => c.Foto).IsRequired();
