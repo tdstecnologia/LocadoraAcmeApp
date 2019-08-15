@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LocadoraAcmeApp.Models;
 using LocadoraAcmeApp.AcessoDados.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace LocadoraAcmeApp.Controllers
 {
     public class NiveisAcessosController : Controller
     {
         private readonly INivelAcessoRepositorio _nivelAcessoRepositorio;
+        private readonly ILogger<NiveisAcessosController> _logger;
 
-        public NiveisAcessosController(INivelAcessoRepositorio nivelAcessoRepositorio)
+        public NiveisAcessosController(INivelAcessoRepositorio nivelAcessoRepositorio, ILogger<NiveisAcessosController> logger)
         {
             _nivelAcessoRepositorio = nivelAcessoRepositorio;
+            _logger = logger;
         }
 
         // GET: NiveisAcessoes
@@ -25,53 +28,41 @@ namespace LocadoraAcmeApp.Controllers
             return View(await _nivelAcessoRepositorio.PegarTodos().ToListAsync());
         }
 
-        // GET: NiveisAcessoes/Details/5
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var niveisAcesso = await _nivelAcessoRepositorio.PegarPeloId
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (niveisAcesso == null)
-            {
-                return NotFound();
-            }
-
-            return View(niveisAcesso);
-        }
-
-        // GET: NiveisAcessoes/Create
         public IActionResult Create()
         {
+            _logger.LogInformation("Iniciando criação de niveis de acesso");
             return View();
         }
 
-        // POST: NiveisAcessoes/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Descricao,Name")] NiveisAcesso niveisAcesso)
         {
-            bool nivelExiste = await _nivelAcessoRepositorio.NivelAcessoExiste(niveisAcesso.Name);
-
-            if (nivelExiste)
+            if (ModelState.IsValid)
             {
-                niveisAcesso.NormalizedName = niveisAcesso.Name.ToUpper();
-                await _nivelAcessoRepositorio.Inserir(niveisAcesso);
-                return RedirectToAction("Index", "NiveisACessos");
+                _logger.LogInformation("Verificando se o nível de acesso existe");
+                bool nivelExiste = await _nivelAcessoRepositorio.NivelAcessoExiste(niveisAcesso.Name);
+
+                if (!nivelExiste)
+                {
+                    niveisAcesso.NormalizedName = niveisAcesso.Name.ToUpper();
+                    await _nivelAcessoRepositorio.Inserir(niveisAcesso);
+                    _logger.LogInformation("Novo nivel de acesso criado");
+
+                    return RedirectToAction("Index", "NiveisAcessos");
+                }
             }
+
+            _logger.LogError("Informações inválidas");
             return View(niveisAcesso);
         }
 
-        // GET: NiveisAcessoes/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
+            _logger.LogInformation("Atualizando nível de acesso");
             if (id == null)
             {
+                _logger.LogInformation("Nível não encontrado");
                 return NotFound();
             }
 
@@ -83,73 +74,35 @@ namespace LocadoraAcmeApp.Controllers
             return View(niveisAcesso);
         }
 
-        // POST: NiveisAcessoes/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("Descricao,Id,Name,NormalizedName,ConcurrencyStamp")] NiveisAcesso niveisAcesso)
         {
             if (id != niveisAcesso.Id)
             {
+                _logger.LogInformation("Nível não encontrado");
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _nivelAcessoRepositorio.Update(niveisAcesso);
-                    await _nivelAcessoRepositorio.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!NiveisAcessoExists(niveisAcesso.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+
+                await _nivelAcessoRepositorio.Atualizar(niveisAcesso);
+                _logger.LogInformation("Nível atualizado");
+                return RedirectToAction("Index", "NiveisAcessos");
+
             }
+
+            _logger.LogError("Informações inválidas");
             return View(niveisAcesso);
         }
 
-        // GET: NiveisAcessoes/Delete/5
+        [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var niveisAcesso = await _nivelAcessoRepositorio.NiveisAcessos
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (niveisAcesso == null)
-            {
-                return NotFound();
-            }
-
-            return View(niveisAcesso);
-        }
-
-        // POST: NiveisAcessoes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var niveisAcesso = await _nivelAcessoRepositorio.NiveisAcessos.FindAsync(id);
-            _nivelAcessoRepositorio.NiveisAcessos.Remove(niveisAcesso);
-            await _nivelAcessoRepositorio.SaveChangesAsync();
+            await _nivelAcessoRepositorio.Excluir(id);
+            _logger.LogInformation("Nível excluído");
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool NiveisAcessoExists(string id)
-        {
-            return _nivelAcessoRepositorio.NiveisAcessos.Any(e => e.Id == id);
         }
     }
 }
