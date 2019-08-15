@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LocadoraAcmeApp.Controllers
 {
-    [Authorize]
+
     public class UsuariosController : Controller
     {
         private readonly IUsuarioRepositorio _usuarioRepositorio;
@@ -62,7 +62,7 @@ namespace LocadoraAcmeApp.Controllers
                     await _usuarioRepositorio.EfetuarLogin(usuario, false);
                     _logger.LogInformation("Usuário logado com sucesso");
 
-                    return RedirectToAction("Index", "Usuarios");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
