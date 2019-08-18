@@ -2,6 +2,7 @@
 using LocadoraAcmeApp.Models;
 using LocadoraAcmeApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
@@ -76,6 +77,43 @@ namespace LocadoraAcmeApp.Controllers
             _logger.LogError("Informações de usuário inválidas");
             return View(registro);
         }
+
+        public async Task<IActionResult> Login(LoginViewModel login)
+        {
+            if (ModelState.IsValid)
+            {
+                _logger.LogInformation("Pegando o usuário pelo email");
+                var usuario = await _usuarioRepositorio.PegarUsuarioPeloEmail(login.Email);
+                PasswordHasher<Usuario> passwordHasher = new PasswordHasher<Usuario>();
+
+                if (usuario != null)
+                {
+                    _logger.LogInformation("Verificando informações do usuário");
+                    if (passwordHasher.VerifyHashedPassword(usuario, usuario.PasswordHash, login.Senha) != PasswordVerificationResult.Failed)
+                    {
+                        _logger.LogInformation("Informações corretas. Logando o usuário");
+                        await _usuarioRepositorio.EfetuarLogin(usuario, false);
+
+                        return RedirectToAction("Index", "Home");
+                    }
+
+                    _logger.LogError("Informações inválidas");
+                    ModelState.AddModelError("", "Email e/ou senha inválidos");
+                }
+
+                _logger.LogError("Informações inválidas");
+                ModelState.AddModelError("", "Email e/ou senha inválidos");
+            }
+            return View(login);
+        }
+
+        public async Task<IActionResult> LogOut()
+        {
+            await _usuarioRepositorio.EfetuarLogOut();
+
+            return RedirectToAction("Login", "Usuarios");
+        }
+
 
     }
 }
