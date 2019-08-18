@@ -21,6 +21,11 @@ namespace LocadoraAcmeApp.Controllers
             _logger = logger;
         }
 
+        public async Task<IActionResult> Index()
+        {
+            _logger.LogInformation("Listando informações");
+            return View(await _usuarioRepositorio.PegarUsuarioLogado(User));
+        }
 
         public async Task<IActionResult> Registro()
         {
@@ -63,7 +68,7 @@ namespace LocadoraAcmeApp.Controllers
                     await _usuarioRepositorio.EfetuarLogin(usuario, false);
                     _logger.LogInformation("Usuário logado com sucesso");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Usuarios");
                 }
                 else
                 {
@@ -94,7 +99,7 @@ namespace LocadoraAcmeApp.Controllers
                         _logger.LogInformation("Informações corretas. Logando o usuário");
                         await _usuarioRepositorio.EfetuarLogin(usuario, false);
 
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Usuarios");
                     }
 
                     _logger.LogError("Informações inválidas");
