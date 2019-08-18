@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using LocadoraAcmeApp.Models;
 using LocadoraAcmeApp.AcessoDados.Interfaces;
 using LocadoraAcmeApp.AcessoDados.Repositorios;
+using LocadoraAcmeApp.Servicos;
 
 namespace LocadoraAcmeApp
 {
@@ -68,6 +69,9 @@ namespace LocadoraAcmeApp
             services.AddScoped<IContaRepositorio, ContaRepositorio>();
             services.AddScoped<ICarroRepositorio, CarroRepositorio>();
             services.AddScoped<IAluguelRepositorio, AluguelRepositorio>();
+
+            services.Configure<ConfiguracoesEmail>(Configuration.GetSection("ConfiguracoesEmail"));
+            services.AddScoped<IEmail, Email>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
