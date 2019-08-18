@@ -67,6 +67,7 @@ namespace LocadoraAcmeApp
             services.AddScoped<IEnderecoRepositorio, EnderecoRepositorio>();
             services.AddScoped<IContaRepositorio, ContaRepositorio>();
             services.AddScoped<ICarroRepositorio, CarroRepositorio>();
+            services.AddScoped<IAluguelRepositorio, AluguelRepositorio>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
