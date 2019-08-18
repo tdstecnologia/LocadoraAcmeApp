@@ -119,6 +119,48 @@ namespace LocadoraAcmeApp.Controllers
             return RedirectToAction("Login", "Usuarios");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Atualizar(string UsuarioId)
+        {
+            _logger.LogInformation("Verificando se o usuário existe");
+            var usuario = await _usuarioRepositorio.PegarPeloId(UsuarioId);
+
+            var atualizarViewModel = new AtualizarViewModel
+            {
+                Id = usuario.Id,
+                Nome = usuario.Nome,
+                CPF = usuario.CPF,
+                Email = usuario.Email,
+                Telefone = usuario.Telefone,
+                NomeUsuario = usuario.UserName
+            };
+            _logger.LogInformation("Atualizar usuário");
+            return View(atualizarViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Atualizar(AtualizarViewModel atualizarViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var usuario = await _usuarioRepositorio.PegarPeloId(atualizarViewModel.Id);
+
+                usuario.Nome = atualizarViewModel.Nome;
+                usuario.CPF = atualizarViewModel.CPF;
+                usuario.UserName = atualizarViewModel.NomeUsuario;
+                usuario.Email = atualizarViewModel.Email;
+                usuario.Telefone = atualizarViewModel.Telefone;
+
+                await _usuarioRepositorio.AtualizarUsuario(usuario);
+                _logger.LogInformation("Atualizando usuário");
+
+                return RedirectToAction("Index", "Usuarios");
+            }
+            _logger.LogError("Informações inválidas");
+
+            return View(atualizarViewModel);
+        }
 
     }
 }
