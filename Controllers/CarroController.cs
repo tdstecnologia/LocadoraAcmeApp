@@ -1,5 +1,6 @@
 ﻿using LocadoraAcmeApp.AcessoDados.Interfaces;
 using LocadoraAcmeApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace LocadoraAcmeApp.Controllers
 {
+    [Authorize]
     public class CarrosController : Controller
     {
         private readonly ICarroRepositorio _carroRepositorio;

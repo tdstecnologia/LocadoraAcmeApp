@@ -95,7 +95,7 @@ namespace LocadoraAcmeApp
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Usuarios}/{action=Login}/{id?}");
             });
         }
     }

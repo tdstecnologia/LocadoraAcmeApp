@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using LocadoraAcmeApp.Models;
 using LocadoraAcmeApp.AcessoDados.Interfaces;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LocadoraAcmeApp.Controllers
 {
+    [Authorize]
     public class EnderecosController : Controller
     {
         private readonly IUsuarioRepositorio _usuarioRepositorio;

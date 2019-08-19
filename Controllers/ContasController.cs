@@ -1,5 +1,6 @@
 ﻿using LocadoraAcmeApp.AcessoDados.Interfaces;
 using LocadoraAcmeApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace LocadoraAcmeApp.Controllers
 {
+    [Authorize]
     public class ContasController : Controller
     {
         private readonly IContaRepositorio _contaRepositorio;

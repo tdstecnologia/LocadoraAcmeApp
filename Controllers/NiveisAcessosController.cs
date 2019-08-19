@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using LocadoraAcmeApp.Models;
 using LocadoraAcmeApp.AcessoDados.Interfaces;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LocadoraAcmeApp.Controllers
 {
+    [Authorize]
     public class NiveisAcessosController : Controller
     {
         private readonly INivelAcessoRepositorio _nivelAcessoRepositorio;

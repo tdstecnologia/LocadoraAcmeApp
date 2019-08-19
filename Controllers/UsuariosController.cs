@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LocadoraAcmeApp.Controllers
 {
-
+    [Authorize]
     public class UsuariosController : Controller
     {
         private readonly IUsuarioRepositorio _usuarioRepositorio;
@@ -27,6 +27,7 @@ namespace LocadoraAcmeApp.Controllers
             return View(await _usuarioRepositorio.PegarUsuarioLogado(User));
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Registro()
         {
             if (User.Identity.IsAuthenticated)
@@ -36,6 +37,7 @@ namespace LocadoraAcmeApp.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Registro(RegistroViewModel registro)
@@ -83,6 +85,19 @@ namespace LocadoraAcmeApp.Controllers
             return View(registro);
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> Login()
+        {
+            if (User.Identity.IsAuthenticated)
+                await _usuarioRepositorio.EfetuarLogOut();
+
+            _logger.LogInformation("Entrando na página de login");
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel login)
         {
             if (ModelState.IsValid)
